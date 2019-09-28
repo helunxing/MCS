@@ -3,10 +3,12 @@ package main
 import (
 	"./cache"
 	"./http"
+	"./tcp"
 )
 
-// 创建cache对象，根据其创建server对象
 func main() {
-	c := cache.New("inmemory")
-	http.New(c).Listen()
+	ca := cache.New("inmemory")
+	// 新协程建立tcp.Server对象
+	go tcp.New(ca).Listen()
+	http.New(ca).Listen()
 }
