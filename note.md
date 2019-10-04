@@ -29,3 +29,10 @@ rocksdb可以虚拟内存，还可以重启恢复。但语言转化有一定开�
 channel类似polling。允许等待多事件同时发生
 
 timer.Timer含一个成员chan Time C，触发后会发送time.Time结构体。重置时要先用stop确认，触发要先取出C中第一个
+
+#### c6 异步操作提升读性能
+服务端使用channel保证异步返回顺序
+
+异步操作支出：channel和协程。rocksdb操作时间较慢，客户端请求密度较高。
+
+本章功能使用channel实现，好处在于易读易实现地完成异步取结果的功能
