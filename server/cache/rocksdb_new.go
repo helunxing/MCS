@@ -21,6 +21,11 @@ func newRocksdbCache() *rocksdbCache {
 	}
 	// 删除指针
 	C.rocksdb_options_destroy(options)
+
+	c := make(chan *pair, 5000)
+	wo := C.rocksdb_writeoptions_create()
+	// 启动一个新的协程接收c中的数据
+	go write_func(db, c, wo)
 	// 返回rocksdbcache结构体指针
-	return &rocksdbCache{db, C.rocksdb_readoptions_create(), C.rocksdb_writeoptions_create(), e}
+	return &rocksdbCache{db, C.rocksdb_readoptions_create(), wo, e, c}
 }
