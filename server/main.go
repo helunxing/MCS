@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"./cache"
+	"./cluster"
 	"./http"
 	"./tcp"
 )
@@ -12,12 +13,21 @@ import (
 func main() {
 	// 接受命令行参数的值
 	typ := flag.String("type", "inmemory", "cache type")
+	node := flag.String("node", "127.0.0.1", "node address")
+	clus := flag.String("cluster", "", "cluster address")
 	flag.Parse()
 	log.Println("type is", *typ)
+	log.Println("node is", *node)
+	log.Println("cluster is", *clus)
 	// 新建cache
 	c := cache.New(*typ)
+	// 新建cluster.Node接口
+	n, e := cluster.New(*node, *clus)
+	if e != nil {
+		panic(e)
+	}
 	// 根据cache在新协程建立tcp.Server对象
-	go tcp.New(c).Listen()
+	go tcp.New(c, n).Listen()
 	// 根据cache创建http.Server对象
-	http.New(c).Listen()
+	http.New(c, n).Listen()
 }
