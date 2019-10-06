@@ -1,5 +1,7 @@
 ## 分布式缓存
+
 ### 基本实现
+
 #### c1 基于http/rest的内存缓存
 
 由于http解析，性能是redis的约四分之一
@@ -17,6 +19,7 @@ cgo调用capi
 rocksdb可以虚拟内存，还可以重启恢复。但语言转化有一定开销
 
 ### 单点性能提升
+
 #### c4 pipeline
 
 不等待回复，连续发多个请求
@@ -24,13 +27,15 @@ rocksdb可以虚拟内存，还可以重启恢复。但语言转化有一定开�
 响应的接受通常由其他协程负责
 
 #### c5 rocksdb批量写入
+
 多个set指令合并成一个，连续写入磁盘。无法得知写入失败，没有实时一致性。
 
 channel类似polling。允许等待多事件同时发生
 
-timer.Timer含一个成员chan Time C，触发后会发送time.Time结构体。重置时要先用stop确认，触发要先取出C中第一个
+timer. Timer含一个成员chan Time C，触发后会发送time. Time结构体。重置时要先用stop确认，触发要先取出C中第一个
 
 #### c6 异步操作提升读性能
+
 服务端使用channel保证异步返回顺序
 
 异步操作支出：channel和协程。rocksdb操作时间较慢，客户端请求密度较高。
@@ -40,6 +45,7 @@ timer.Timer含一个成员chan Time C，触发后会发送time.Time结构体。�
 传出的channel在何处关闭？
 
 ### 服务集群
+
 #### c7 分布式缓存
 
 本书实现同构集群，之间通过gossip协议更新状态。
@@ -49,3 +55,8 @@ timer.Timer含一个成员chan Time C，触发后会发送time.Time结构体。�
 当前无法保证一致性
 
 #### c8 节点再平衡
+
+添加节点时，将老节点的部分数据迁移到新结点上。
+
+inMemoryScanner未看懂
+
