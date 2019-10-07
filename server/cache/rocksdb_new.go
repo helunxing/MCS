@@ -6,7 +6,7 @@ package cache
 import "C"
 import "runtime"
 
-func newRocksdbCache() *rocksdbCache {
+func newRocksdbCache(ttl int) *rocksdbCache {
 	// 创建对象指针
 	options := C.rocksdb_options_create()
 	// 设置并发线程数
@@ -15,7 +15,8 @@ func newRocksdbCache() *rocksdbCache {
 	C.rocksdb_options_set_create_if_missing(options, 1)
 	// 打开目录
 	var e *C.char //这个变量本应该手动回收
-	db := C.rocksdb_open(options, C.CString("/mnt/rocksdb"), &e)
+	// 传入生存时间即可
+	db := C.rocksdb_open_with_ttl(options, C.CString("/mnt/rocksdb"), C.int(ttl), &e)
 	if e != nil {
 		panic(C.GoString(e))
 	}

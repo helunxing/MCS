@@ -60,3 +60,7 @@ timer. Timer含一个成员chan Time C，触发后会发送time. Time结构体�
 
 inMemoryScanner未看懂
 
+#### c9 缓存生存时间
+
+#### 结尾
+资源总量越大，失效概率越高。实际获取速度越快，缓存边界效用越低。遇到性能问题要具体分析。

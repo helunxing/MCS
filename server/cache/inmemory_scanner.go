@@ -41,7 +41,7 @@ func (c *inMemoryCache) NewScanner() Scanner {
 			case <-closeCh:
 				return
 			// pairCh可写则写
-			case pairCh <- &pair{k, v}:
+			case pairCh <- &pair{k, v.v}:
 			}
 			c.mutex.RLock()
 		}
