@@ -42,7 +42,7 @@ timer. Timer含一个成员chan Time C，触发后会发送time. Time结构体�
 
 本章功能使用channel实现，好处在于易读易实现地完成异步取结果的功能
 
-传出的channel在何处关闭？
+传出的channel在何处关闭？不会阻塞消费者无需手动关闭
 
 ### 服务集群
 
